@@ -2,19 +2,17 @@
   <div class="chess">
     
     <div class="stream_wrapper">
-       <div id="draggable">
-      <div class="jitsi" id="local_stream"></div>
-      <div class="role-username" id="local_streamName" draggable="true">
-        <b>{{findStudentname}}</b><br>{{userRole ==="mentor"?"MENTOR":"STUDENT"}}
+      <div id="draggable">
+          <div class="jitsi" id="local_stream"></div>
+          <div class="role-username" id="local_streamName" draggable="true">
+            <b>{{findStudentname}}</b><br>{{userRole ==="mentor"?"MENTOR":"STUDENT"}}
+          </div>
+        </div>
+         
+        <div id="draggable-remote">
+        <div class="jitsi" id="remote_stream"></div>
+        <div class="role-studentname" id="remote_streamName"><b>{{findMentorName}}</b><br>{{userRole ==="mentor"?"STUDENT":"MENTOR"}}</div>
       </div>
-    </div>
-      <!-- <iframe src="https://meet.jit.si/" class="jitsi" frameborder="0" style="position: relative; height: 100%; width: 100%;"></iframe>  -->
-      
-      <div id="draggable-remote">
-      <div class="jitsi" id="remote_stream"></div>
-      <div class="role-studentname" id="remote_streamName"><b>{{findMentorName}}</b><br>{{userRole ==="mentor"?"STUDENT":"MENTOR"}}</div>
-      <!-- <iframe src="https://meet.jit.si/" class="jitsi" frameborder="0" style="position: relative; height: 100%; width: 100%;"></iframe>  -->
-    </div>
     </div>
     <div [ngClass]="{ 'disable-board': !isStepLast }">
       <iframe [src]="chessSrc" id="chessBd"></iframe>
@@ -56,7 +54,7 @@
           <div style="width: 100px">
             <div
               *ngFor="let item of displayMoves; let i = index"
-              (click)="setMove(i,'direct')" style=" background-color: #b5d6e1;"
+              (click)="setMove(i,'direct')" style=" background-color: #b5d6e1; margin-inline: 2px;"
             >
               <p *ngIf="i % 2 === 0" [class.tableMove-selected]="i == currentStep">
                 <img [src]="imgPos(i)" alt="" class="imgRes" /> {{ item.pos }}

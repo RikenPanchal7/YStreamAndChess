@@ -465,17 +465,13 @@ const inMeeting = async (role, username) => {
 const deleteUser = async (role, username) => {
   if (role === "student") {
     const user = await waitingStudents.findOne({username : username})
-    console.log('user',user)
     if(user != null){
-      user.delete()
-      console.log("User deleted successfull")
+      user.delete();
     }
   }else if (role === "mentor") {
     const mentor = await waitingMentors.findOne({username : username})
-    console.log('mentor',mentor)
     if(mentor != null){
-      mentor.delete()
-      console.log("mentor deleted successfull")
+      mentor.delete();
     }
   }
   //   await waitingStudents.findOneAndDelete(

@@ -125,22 +125,10 @@ export class PlayComponent implements OnInit {
           document.getElementById('local_stream').style.display = 'block';
           document.getElementById('remote_stream').style.display = 'block';
           document.getElementById('local_stream').style.backgroundColor = '#00dff2';
-          document.getElementById('remote_stream').style.backgroundColor = '#ff0000';
-          document.getElementById('remote_stream').style.marginTop = '0px';
-          document.getElementById('remote_stream').style.height = '215px';
           document.getElementById('local_stream').style.cursor = 'move';
-          document.getElementById('remote_stream').style.cursor = 'move';
           document.getElementById('local_streamName').style.display = 'block';
-          document.getElementById('remote_streamName').style.display = 'block';
-          
           document.getElementById('draggable').style.position = 'absolute';
-          document.getElementById('draggable-remote').style.position = 'absolute';
-          document.getElementById('draggable-remote').style.top = '400px';
-          
-
           // this.dragElement(document.getElementById("local_stream"));
-         
-
           document.getElementById('draggable').onmousedown = () => {
             var element = document.getElementById("draggable");
             this._drag_init_Div(element);
@@ -196,6 +184,17 @@ export class PlayComponent implements OnInit {
           );
 
           if (userContent.role === 'mentor') {
+            setTimeout(() => {
+              document.getElementById('remote_stream').style.backgroundColor = '#ff0000';
+              document.getElementById('remote_stream').style.marginTop = '0px';
+              document.getElementById('remote_stream').style.height = '215px';
+              document.getElementById('remote_stream').style.cursor = 'move';
+              document.getElementById('remote_streamName').style.display = 'block';
+              document.getElementById('draggable-remote').style.position = 'absolute';
+              document.getElementById('draggable-remote').style.top = '400px';
+              document.getElementById('player_789').style.display = 'none';
+            }, 5000);
+            
             this.screenClient = this.agoraService.createClient({
               mode: 'rtc',
               codec: 'h264',
@@ -273,12 +272,24 @@ export class PlayComponent implements OnInit {
             this.remoteStream = evt.stream;
             this.remoteStream.play('remote_stream');
             if (userContent.role === 'mentor') {
+              setTimeout(() => {
+              document.getElementById('remote_stream').style.backgroundColor = '#ff0000';
+              document.getElementById('remote_stream').style.marginTop = '0px';
+              document.getElementById('remote_stream').style.height = '215px';
+              document.getElementById('remote_stream').style.cursor = 'move';
+              document.getElementById('remote_streamName').style.display = 'block';
+              document.getElementById('draggable-remote').style.position = 'absolute';
+              document.getElementById('draggable-remote').style.top = '400px';
               document.getElementById('player_789').style.display = 'none';
+            }, 500);
             } else {
-              document.getElementById('remote_stream').style.display = 'none';
-              document.getElementById('remote_streamName').style.display = 'none';
-              
-              
+              setTimeout(() => {
+                document.getElementById('remote_stream').style.display = 'none';
+                document.getElementById('remote_streamName').style.display = 'none';
+                document.getElementById('remote_stream').style.backgroundColor = 'none';
+                document.getElementById('remote_stream').style.marginTop = '0px';
+                document.getElementById('remote_stream').style.height = '0px';
+              }, 500);
             }
           });
 

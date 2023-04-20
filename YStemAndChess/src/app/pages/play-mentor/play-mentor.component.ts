@@ -106,6 +106,7 @@ video.addEventListener('leavepictureinpicture', () => {
         'POST',
         (response) => {
           let result = JSON.parse(response);
+          console.log('result',result)
           this.newGameId = result.gameId;
         }
       );

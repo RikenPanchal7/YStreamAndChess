@@ -375,6 +375,7 @@ export class StudentComponent implements OnInit {
         `${environment.urls.middlewareURL}/meetings/newGameStoreMoves?gameId=${this.newGameId}`,
         'POST',
         (response) => {
+          console.log('this.newGameId',this.newGameId);
           if (response) {
             this.httpGetAsync(
               `${environment.urls.stockFishURL}/?level=${this.level}&fen=${this.currentFEN}`,
