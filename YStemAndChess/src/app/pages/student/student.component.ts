@@ -546,18 +546,21 @@ export class StudentComponent implements OnInit {
     }
   }
   public newGame() {
+    this.displayMoves = [];
     this.playwithcomputer = false;
     let userContent = JSON.parse(atob(this.cookie.get('login').split('.')[1]));
     this.socket.emitMessage(
       'createNewGame',
       JSON.stringify({ username: userContent.username })
     );
-    this.getMovesList();
+    // this.getMovesList();
     let url: string;
+    this.displayMoves = [];
     url = `${environment.urls.middlewareURL}/meetings/newBoardState?meetingId=${this.meetingId}`;
     this.httpGetAsync(url, 'POST', (response) => {
       response = JSON.parse(response);
-      this.displayMoves = response.moves || [];
+      // this.displayMoves = response.moves || [];
+        this.displayMoves = [];
     });
   }
   private scrollToBottom(): void {
