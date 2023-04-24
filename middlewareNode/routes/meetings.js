@@ -651,14 +651,44 @@ router.post("/newGameStoreMoves", async (req, res) => {
 
 router.post("/getStoreMoves", async (req, res) => {
   try {
-    const { gameId } = req.query;
-    const getBoardStates = await getMovesByGameId(gameId);
-    res.status(200).send(getBoardStates);
+    const { gameId, meetingId } = req.query;
+    if(meetingId){
+      const getBoardStates = await getMoves(meetingId);
+      res.status(200).send(getBoardStates);  
+    }else{
+      const getBoardStates = await getMovesByGameId(gameId);
+      res.status(200).send(getBoardStates);
+    }
   } catch (error) {
     console.error(error.message);
     res.status(500).json("Server error");
   }
 });
+
+router.post("/undoMeetingMoves", async (req, res) => {
+  try {
+    const { meetingId } = req.query;
+    console.log('meetingId', meetingId)
+    const getBoardState = await getMoves(meetingId);
+    const movesData = getBoardState.moves;
+    console.log("movesData",movesData)
+    const newData = movesData[movesData.length - 1];
+    const finalData = newData.splice(-2, 2);
+    const deletedData = await deleteMovesByMeetingId(meetingId, movesData);
+    res.status(200).send(deletedData);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json("server error");
+  }
+});
+
+const deleteMovesByMeetingId = async (meetingId, deletedData) => {
+  const deletedMove = await meetings.findOneAndUpdate(
+    { meetingId: meetingId },
+    { moves: deletedData }
+  );
+  return deletedMove;
+};
 
 router.post("/undoMoves", async (req, res) => {
   try {

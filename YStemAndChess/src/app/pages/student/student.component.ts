@@ -427,6 +427,45 @@ export class StudentComponent implements OnInit {
 
   public undoPrevMove() {
     // console.log("test undo function--->")
+    if(this.meetingId){
+      console.log('this.meetingId',this.meetingId)
+      this.httpGetAsync(
+        `${environment.urls.middlewareURL}/meetings/undoMeetingMoves?meetingId=${this.meetingId}`,
+        'POST',
+        (response) => {
+          if (response) {
+            response = JSON.parse(response);
+            this.getMovesLists();
+            const finalFEN = response.moves[response.moves.length - 1];
+            const FEN = finalFEN[finalFEN.length - 2].fen;
+            if (finalFEN.length === 2) {
+              let chessBoard = (<HTMLFrameElement>(
+                document.getElementById('chessBd')
+              )).contentWindow;
+              chessBoard.postMessage(
+                JSON.stringify({
+                  boardState: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+                }),
+                environment.urls.chessClientURL
+              );
+            } else {
+              var chessBoard = (<HTMLFrameElement>(
+                document.getElementById('chessBd')
+              )).contentWindow;
+              chessBoard.postMessage(
+                JSON.stringify({
+                  boardState: FEN,
+                  color: this.color,
+                }),
+                environment.urls.chessClientURL
+              );
+            }
+  
+            console.log(FEN);
+          }
+        }
+      );
+    }else{
     this.httpGetAsync(
       `${environment.urls.middlewareURL}/meetings/undoMoves?gameId=${this.newGameId}`,
       'POST',
@@ -463,6 +502,7 @@ export class StudentComponent implements OnInit {
         }
       }
     );
+    }
   }
   getMovesList = () => {
     let url: string = '';
@@ -473,6 +513,21 @@ export class StudentComponent implements OnInit {
     });
   };
   getMovesLists = () => {
+    if(this.meetingId){
+      this.httpGetAsync(
+        `${environment.urls.middlewareURL}/meetings/getStoreMoves?meetingId=${this.meetingId}`,
+        'POST',
+        (response) => {
+          response = JSON.parse(response);
+          let finalMove =
+            response.moves.length > 0
+              ? response.moves[response.moves.length - 1]
+              : response.moves;
+          this.displayMoves = finalMove || [];
+          this.currentStep = finalMove.length > 0 ? finalMove.length - 1 : 0;
+        }
+      );
+    }else{
     this.httpGetAsync(
       `${environment.urls.middlewareURL}/meetings/getStoreMoves?gameId=${this.newGameId}`,
       'POST',
@@ -486,6 +541,7 @@ export class StudentComponent implements OnInit {
         this.currentStep = finalMove.length > 0 ? finalMove.length - 1 : 0;
       }
     );
+    }
   };
   setMove(index, direction) {
     this.currentStep =
